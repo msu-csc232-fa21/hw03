@@ -4,96 +4,164 @@
  *
  * @file     hw01-test.cpp
  * @authors  Jim Daehn <jdaehn@missouristate.edu>
- * @brief    HW01 Unit test implementation -- DO NOT MODIFY THIS FILE!!!
+ * @brief    HW03 Unit test implementation -- DO NOT MODIFY THIS FILE!!!
  */
 
-#define CATCH_CONFIG_MAIN  // Tell Catch to provide a main() - only do this in one cpp file
+#define CATCH_CONFIG_MAIN // Tell Catch to provide a main() - only do this in one cpp file
 #include <catch2/catch.hpp>
 #include "csc232.h"
+#include "BagInterface.h"
+#include "ArrayBag.h"
 
-SCENARIO( "Base case of Ackermann function (m = 0)", "[acker]" )
+#if FINISHED_PART_1
+SCENARIO("Testing the array bag recursive toVector implementation", "part1")
 {
-    GIVEN( "Initial values of m == 0 and n == 0" )
+    GIVEN("An empty bag of integers")
     {
-        int m{ 0 };
-        int n{ 0 };
+        BagInterface<int> *bag = new ArrayBag<int>{};
 
-        WHEN( "We compute the value of the Ackermann function acker(0, 0)" )
+        WHEN("we see how many items it contains")
         {
-            REQUIRE( m == 0 );
-            REQUIRE( n == 0 );
+            REQUIRE(bag != nullptr);
+            int num_items{bag->getCurrentSize()};
 
-            int actual{ csc232::acker( m, n ) };
-            int expected{ 1 };
-
-            THEN( "We obtain the desired result" )
+            THEN("we find it contains no items")
             {
-                REQUIRE( actual == expected );
+                REQUIRE(num_items == 0);
             }
         }
-    }
 
-    GIVEN( "Initial value of m == 0 and n == 1" )
-    {
-        int m{ 0 };
-        int n{ 1 };
-        
-        WHEN( "We compute the value of the Ackermann function acker(0, 1)" )
+        WHEN("we see if it is empty")
         {
-            REQUIRE( m == 0 );
-            REQUIRE( n == 1 );
+            REQUIRE(bag != nullptr);
+            bool is_empty{bag->isEmpty()};
 
-            int actual{ csc232::acker( m, n ) };
-            int expected{ 2 };
-
-            THEN( "We obtain the desired result" )
+            THEN("we find it is indeed initially empty")
             {
-                REQUIRE( actual == expected );
+                REQUIRE(is_empty);
             }
         }
-    }
 
-    
-    GIVEN( "Initial value of m == 0 and n == 2")
-    {
-        int m{ 0 };
-        int n{ 2 };
-        
-        WHEN( "We compute the value of the Ackermann function acker( 0, 2)" )
+        WHEN("we add an item to an empty bag")
         {
-            REQUIRE( m == 0 );
-            REQUIRE( n == 2 );
+            REQUIRE(bag != nullptr);
+            int item{42};
+            int previous_size{bag->getCurrentSize()};
+            bool is_added{bag->add(item)};
 
-            int actual{ csc232::acker( m, n ) };
-            int expected{ 3 };
-
-            THEN( "We obtain the desired result" )
+            THEN("it contains that one additional item")
             {
-                REQUIRE( actual == expected );
+                int current_size{bag->getCurrentSize()};
+                REQUIRE(is_added);
+                REQUIRE(current_size == previous_size + 1);
+                REQUIRE(bag->contains(item));
+
+                AND_WHEN("we remove that item")
+                {
+                    bool is_removed{bag->remove(item)};
+                    THEN("it no longer contains any items")
+                    {
+                        current_size = bag->getCurrentSize();
+                        REQUIRE(current_size == previous_size);
+                        REQUIRE_FALSE(bag->contains(item));
+                    }
+                }
+            }
+        }
+
+        WHEN("we add an item to a full bag")
+        {
+            for (int item{0}; item < 6; ++item)
+            {
+                bag->add(item);
+            }
+            REQUIRE(bag->getCurrentSize() == 6);
+            bool is_added{bag->add(7)};
+
+            THEN("we find we couldn't add it and the size hasn't changed")
+            {
+                REQUIRE_FALSE(is_added);
+                REQUIRE(bag->getCurrentSize() == 6);
+                std::vector<int> contents = bag->toVector();
+                std::vector<int> expected_contents{0, 1, 2, 3, 4, 5};
+                for (int item{0}; item < 6; ++item)
+                {
+                    REQUIRE(contents.at(item) == expected_contents.at(item));
+                    REQUIRE(bag->getFrequencyOf(item) == 1);
+                }
+            }
+
+            AND_WHEN("we clear the bag")
+            {
+                bag->clear();
+
+                THEN("the bag is empty")
+                {
+                    REQUIRE(bag->isEmpty());
+                }
             }
         }
     }
 }
+#endif
 
-SCENARIO( "Ackermann function computes values given in Exercise 26", "[acker]" )
+#if FINISHED_PART_2
+SCENARIO("Testing the overloaded remove method", "part2")
 {
-    GIVEN( "The values presented in Exercise 26" )
+    GIVEN("An an array bag with several items")
     {
-        int m{ 1 };
-        int n{ 2 };
+        BagInterface<std::string> *bag{new ArrayBag<std::string>{}};
+        REQUIRE(bag != nullptr);
+        bag->add("CSC232");
+        bag->add("-");
+        bag->add("Data Structures");
+        bag->add(",");
+        bag->add("Fall, 2021");
+        REQUIRE(bag->getCurrentSize() == 5);
+        REQUIRE_FALSE(bag->isEmpty());
 
-        WHEN( "We compute the value of the Ackermann function aker(1, 2)" )
+        WHEN("we remove a random item")
         {
-            REQUIRE( m == 1 );
-            REQUIRE( n == 2 );
+            int original_size{bag->getCurrentSize()};
+            std::string item{bag->remove()};
 
-            int actual{ csc232::acker( m, n ) };
-            int expected{ 4 };
-
-            THEN( "We obtain the desired result")
+            THEN("one of the items has been removed")
             {
-                REQUIRE( actual == expected );
+                int current_size{bag->getCurrentSize()};
+                REQUIRE(current_size == original_size - 1);
+                bool item_existed{item == std::string{"CSC232"} ||
+                                  item == std::string{"-"} ||
+                                  item == std::string{"Data Structures"} ||
+                                  item == std::string{","} ||
+                                  item == std::string{"Fall, 2021"}};
+                REQUIRE(item_existed);
             }
         }
     }
 }
+#endif
+
+#if FINISHED_PART_3
+SCENARIO("Testing the overloaded constructor", "part3")
+{
+    GIVEN("Items to put into a new bag")
+    {
+        std::pair<int, int> coordinates[] = {std::make_pair(-1, 2), std::make_pair(0, 0), std::make_pair(1, 2)};
+        int expected_size{3};
+
+        WHEN("we create a bag of these items")
+        {
+            BagInterface<std::pair<int, int>>* bag = new ArrayBag<std::pair<int, int>>{coordinates, 3};
+
+            THEN("the bag contains all these items")
+            {
+                REQUIRE(bag->getCurrentSize() == expected_size);
+                for (int index{0}; index < expected_size; ++index)
+                {
+                    REQUIRE(bag->contains(coordinates[index]));
+                }
+            }
+        }
+    }
+}
+#endif

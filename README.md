@@ -135,37 +135,170 @@ Additional preliminary steps you may want to take:
 
 ### Part 1: Overriding an existing operation
 
-In Part 1 of this assignment you will override the `toVector` operation inherited from the `ArrayBag` class.
+In Part 1 of this assignment you will provide a _different implementation_ of the `toVector` operation. Your new implementation will use recursion to create a vector of the items contained in the bag. Recall, recursive functions require some parameter that will help drive repeated execution towards reaching the base case. Thus, the existing `toVector()` operation inherited from the `BagInterface` cannot serve as a recursive function (it doesn't have any parameters, so there's no way to drive you towards a base case case).
 
-#### Implementation Notes: A new implementation of an existing function
+In these scenarios, one often defines a _private_ helper member function that acts recursively. This helper member function is called initially from within the existing _public_ member function. For example, take a look at the definition of `toVector()` found in [src/ArrayBag.cpp](src/ArrayBag.cpp). It looks like this:
 
-<!-- Be sure to thoroughly comment your code. Use the `javadoc`-style Doxygen comments to provide a brief description of the function, its parameters, return values and pre and post conditions.
+```c++
+template <typename ItemType>
+std::vector<ItemType> ArrayBag<ItemType>::toVector() const
+{
+    std::vector<ItemType> bagContents;
+    addToVector(bagContents, 0);
+    return bagContents;
+} // end toVector
+```
 
-After you have modoified this file, add it to revision control, commit your changes and push the commit to GitHub using the following `git` commands (the output, where it occurred, has been ommitted for clarity).
+The second statement in the body of the function, `addToVector(bagContents, 0)` is the initial call of the recursive helper function. A vector (named `bagContents`) is passed by reference to the `addToVector()` method. The second argument passed to the `addToVector()` method (0, in this initial call), is the starting index of the array whose contents are (recursively) added to the vector with each (recursive) call. The recursive calls whenever that second parameter is less than the number of items in the bag.
+
+When you have completed this part, toggle the macro `FINISHED_PART_1` found in [include/csc232.h](include/csc232.h) from `FALSE` to `TRUE` and run the test target to verify you have successfully implemented the `toVector` operation correctly.
+
+Your task then, in Part 1, is to implement this helper function. Open the array bag implementation file [src/ArrayBag.cpp](src/ArrayBag.cpp) and look for the `TODO: Part 1 - Implement me...` line found in the (essentially) empty body of this helper method. Replace that `TODO` comment with your (recursive) implementation of this member function.
+
+When you're ready to test your implementation, toggle the macro `FINISHED_PART_1` found in [include/csc232.h](include/csc232.h) from `FALSE` to `TRUE` and run the `hw03-tests` target.
+
+After you have finished modifying this file, add it to revision control, commit your changes and push the commit to GitHub using the following `git` commands (the output, where it occurred, has been ommitted for clarity).
 
 ```bash
+git add src/ArrayBag.cpp
 git add include/csc232.h
-git commit -m"HW02 - Initial import of Ackermann function."
+git commit -m"HW03 - Completed Part 1."
 git push
 ```
 
-As a final step, log onto GitHub and make sure that your pull request has all your commits. If it doesn't, make a final commit and/or push your last commit to GitHub. Also, make sure that `professordaehn`, `lakshmidivyavaddineni` and `SunandaGuha` are listed as a Reviewers on your pull request. (It may be that only `professordaehn` is listed; if that is the case, manually add the GA usernames too. While you're at it, assign the pull request to yourself.) -->
+### Part 2: Expanding the Bag Interface
 
-### Part 2: Extending a class
+In Part 2 of this assignment you will _modify_ both the `BagInterface` and `ArrayBag` classes by adding a new operation that removes a random entry from the bag. That is, we are expanding the API of the `BagInterface`. Since `ArrayBag` implements this interface, it will have to provide an implementation for this new method it inherits from the `BagInteface`. Doing this will require three steps:
 
-In Part 2 of this assignment you will _extend_ the `ArrayBag` class by adding a new operation that removes a random entry from the bag.
+1. Add a new pure virtual method to the `BagInterface` specification (header) file ([include/BagInterface.h](include/BagInterface.h)).
+2. Add a new member function declaration to the `ArrayBag` specification (header) file ([include/ArrayBag.h](include/ArrayBag.h)).
+3. Add a new member function definition to the `ArrayBag` implementation (source) file ([src/ArrayBag.cpp](src/ArrayBag.cpp)).
 
-#### Implementation Notes: Random number generators
+#### Updating the Bag Interface ADT
 
-TO DO: Discuss generating random numbers in some range (to select a random index in the array for item removal).
+As mentioned above, the first step is to expand the current `BagInterface` API by adding a new pure virtual function declaration to [include/BagInterface.h](include/BagInterface.h). Open this file and locate the Doxygen comments that guide your effort here:
+
+```c++
+    /**
+     * @brief TODO: Part 2a - Declare a new pure virtual member function named
+     *        remove that has a return type of ItemType and no parameters.
+     * 
+     * @return A randomly removed item from this bag.
+     */
+```
+
+Just below these comments, add your pure virtual function declaration. Note: the name of this function is expected to begin with a lowercase letter.
+
+After you have modified this file, add it to revision control, commit your changes and push the commit to GitHub using the following `git` commands (again the output, where it occurred, has been ommitted for clarity).
+
+```bash
+git add include/BagInterface.h
+git commit -m"HW03 - Completed Part 2a."
+git push
+```
+
+#### Updating the ArrayBag Specification
+
+Now that the `BagInterface` has a new pure virtual method declared in it, the `ArrayBag` specification similarly needs updating. Locate the comment:
+
+```c++
+// TODO: Part 2b - Declare the overloaded remove method below
+```
+
+in the [include/ArrayBag.h](include/ArrayBag.h) header file.
+
+Replace that comment with the appropriate override statement. Use the other methods as your guide for how to declare this method as an `override`.
+
+After you have modified this file, add it to revision control, commit your changes and push the commit to GitHub using the following `git` commands (again the output, where it occurred, has been ommitted for clarity).
+
+```bash
+git add include/ArrayBag.h
+git commit -m"HW03 - Completed Part 2b."
+git push
+```
+
+#### Updating the ArrayBag Implementation
+
+Now that you've "promised" to override an inherited method, it's time to live up to your obligations. Locate the comment:
+
+```c++
+// TODO: Part 2c - Implement the overloaded remove method below
+```
+
+in the [src/ArrayBag.cpp](src/ArrayBag.cpp) source file.
+
+Replace that comment with your implementation of this new member function. This will be fairly similar to the existing `remove` method, differing only in which item is removed. In the existing (original) `remove` method, you had a parameter -- the item to locate, and if found -- that specifies which item to remove. This new version of `remove` no longer has a parameter; you'll be removing a random item from the array. Thus, in essence what you need to do is generate a random index somewhere in the range of 0 to the number of items that are currently in your bag. That randomly generated index will be the item to remove. Finally, one other significant difference between this version and the existing version of `remove` is that you are actually returning the item that was randomly selected for removal. Recall, the original `remove` method simply return a `bool` value related to the success or failure of said removal.
+
+C++ contains libraries to help you with generating (pseudo) random integers in a range of values. See, for example, [cppreference.com](https://en.cppreference.com/w/cpp/numeric/random/uniform_int_distribution).
+
+Borrowing from that page, the following lines of code can be used to generate a random integer from `LOWER_BOUNDARY_VALUE` to `UPPER_BOUNDARY_VALUE` (inclusive).
+
+```c++
+std::random_device rd;  // Will be used to obtain a seed for the random number engine
+std::mt19937 gen{rd()}; // Standard mersenne_twister_engine seeded with rd()
+std::uniform_int_distribution<> distrib{LOWER_BOUNDRY_VALUE, UPPER_BOUNDRY_VALUE};
+```
+
+Take a moment to think about what these boundary values are for this particular implementation.
+
+When you're ready to test your implementation, toggle the macro `FINISHED_PART_2` found in [include/csc232.h](include/csc232.h) from `FALSE` to `TRUE` and re-run the `hw03-tests` target.
+
+After you have finished modifying this file, add it to revision control, commit your changes and push the commit to GitHub using the following `git` commands (again the output, where it occurred, has been ommitted for clarity).
+
+```bash
+git add src/ArrayBag.cpp
+git add include/csc232.h
+git commit -m"HW03 - Completed Part 2c."
+git push
+```
 
 ### Part 3: Overloading class constructor
 
-In Part 3 of this assignment you will _overload_ the constructor of an existing class (`ArrayBag`).
+In Part 3 of this assignment you will _overload_ the constructor of the `ArrayBag` class.
 
-#### Implementation Notes: Initializing constructors
+In the [include/ArrayBag.h](include/ArrayBag.h) header file, locate the comment:
 
-TO DO: Discuss how to copy the contents of array into newly constructed object.
+```c++
+// TODO: Part 3a - Declare overloaded constructor below
+```
+
+Replace that comment with the declaration of another constructor. In this case, it is considered an "initializing" constructor because we're passing in some parameters that are used to initialize the state of the new created `ArrayBag` object. In this overloaded constructor, we'll need to pass in two parameters:
+
+1. An array of `ItemType` that contains a collection of items used to initialize this `ArrayBag`.
+2. An integer that represents the size of the array (because of course, arrays don't know their own size).
+
+After you have finished modifying this file, add it to revision control, commit your changes and push the commit to GitHub using the following `git` commands (again the output, where it occurred, has been ommitted for clarity).
+
+```bash
+git add include/ArrayBag.h
+git commit -m"HW03 - Completed Part 3a."
+git push
+```
+
+Next, locate the comment:
+
+```c++
+// TODO: Part 3b - Implement overloaded constructor
+```
+
+in the [src/ArrayBag.cpp](src/ArrayBag.cpp) implementation source file.
+
+Replace that comment with your implementation of this overloaded constructor. Note: you should still use the initialization list as shown in the default constructor implementation, albeit `itemCount` won't be 0 this time; it'll be value of your array size parameter passed to this constructor.
+
+In addition to initializing the `ArrayBag` attributes with the appropriate initialization list, you must also copy the items in the passed-in array into the newly constructed `ArrayBag` attribute (`items`); this is done in the body of this constructor.
+
+When you're ready to test your implementation, toggle the macro `FINISHED_PART_3` found in [include/csc232.h](include/csc232.h) from `FALSE` to `TRUE` and re-run the `hw03-tests` target.
+
+After you have finished modifying this file, add it to revision control, commit your changes and push the commit to GitHub using the following `git` commands (again the output, where it occurred, has been ommitted for clarity).
+
+```bash
+git add src/ArrayBag.cpp
+git add include/csc232.h
+git commit -m"HW03 - Completed Part 3b."
+git push
+```
+
+As a final step, log onto GitHub and make sure that your pull request has all your commits. If it doesn't, make a final commit and/or push your last commit to GitHub. Also, make sure that `professordaehn`, `lakshmidivyavaddineni` and `SunandaGuha` are listed as a Reviewers on your pull request. (It may be that only `professordaehn` is listed; if that is the case, manually add the GA usernames too. While you're at it, assign the pull request to yourself.)
 
 ## Submission Details
 
