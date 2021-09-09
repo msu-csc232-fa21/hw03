@@ -14,18 +14,18 @@ Having slain the Nemean Lion and the Lernaean Hydra, the Student is now prepared
 
 <p><a href="https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Lucas_Cranach_d.%C3%84._-_Herkules_und_die_Hirschkuh_der_Diana_%28Herzog_Anton_Ulrich-Museum%29.jpg/800px-Lucas_Cranach_d.%C3%84._-_Herkules_und_die_Hirschkuh_der_Diana_%28Herzog_Anton_Ulrich-Museum%29.jpg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Lucas_Cranach_d.%C3%84._-_Herkules_und_die_Hirschkuh_der_Diana_%28Herzog_Anton_Ulrich-Museum%29.jpg/800px-Lucas_Cranach_d.%C3%84._-_Herkules_und_die_Hirschkuh_der_Diana_%28Herzog_Anton_Ulrich-Museum%29.jpg" height="480" width="430"></a></p>
 
-## ADTs: Extending the ArrayBag
+## ADTs: Updating the ArrayBag
 
 _Note: This assignment is related to the Exercises 6, 8 and 9 of Chapter 3 found in **Data Abstraction and Problem-Solving with C++**, seventh edition, by Carrano & Henry. See [our disclaimer below](#disclaimer--fair-use-statement)._
 
-This assignment is primarily meant to give the student experience in extending an existing class, i.e., with more experience with the concept of inheritance. Along the way, the student also gains more experience with recursion.
+This assignment is primarily meant to give the student experience in modifying existing classes, i.e., with more experience with the concept of inheritance. Along the way, the student also gains more experience with recursion.
 
 ## Objectives
 
 In this assignment you
 
-* override an existing method of the `ArrayBag`
-* extend the `ArrayBag` by
+* modify the implementation of one of the methods in the `ArrayBag` class
+* Update the `BagInterface` (and its `ArrayBag` implementation) by
   * adding a new method that removes a random entry in the bag
   * adding a new constructor
 
@@ -35,7 +35,7 @@ Upon successful completion of this assignment, the student will implement the fo
 * **Exercise 8**: Specify and define a method for `ArrayBag` that removes a random entry from the bag
 * **Exercise 9**: Add a constructor to the class `ArrayBag` that creates a bag from a given array of entries
 
-These three exercises will be tackled by extending the `ArrayBag` into a new class named `ExtendedArrayBag`.
+These three exercises will be tackled by modifying the `BagInterface` and `ArrayBag` specifications and implementations.
 
 ## Background Reading
 
@@ -52,33 +52,7 @@ If you have not read these chapters, do it now!
 
 ## C++ Concepts Overview
 
-As we have seen, inheritance is a form of code reuse. Here, we will reuse much of the code already written in the `ArrayBag`. We will _extend_ this class by overriding one of its inherited methods, writing a new method that isn't a part of the `BagInterface`, and _overloading_ the class constructor.
-
-Consider the class hierarchy we have already, and the modification we'll make to it:
-
-```c++
-template <typename ItemType>
-class ArrayBag : public BagInterface<ItemType> 
-{
-private:
-   // details omitted for brevity
-public:
-   ArrayBag( ItemType items[] ); // an overloaded constructor
-   // remaining details omitted for brevity
-};
-```
-
-Next, we'll _extend_ this `ArrayBag` into a new class named `ExtendedArrayBag`:
-
-```c++
-template <typename ItemType>
-class ExtendedArrayBag : public ArrayBag<ItemType>
-{
-public:
-   bool RemoveRandomEntry( ); // a new extension of the ArrayBag
-   std::vector<ItemType> toVector() const override; // an overridden operation
-};
-```
+As we have seen, inheritance is a form of code reuse. Here, we will reuse much of the code already written in the `ArrayBag`. We will _update_ this class by modifying one of its  methods, writing a new method that that will be added to the `BagInterface`, and _overloading_ the class constructor.
 
 This small and simple exercise actually entails three important concepts:
 
@@ -119,8 +93,8 @@ Don't forget the trailing period `.` for it specifies to code that you want to o
 
 This assignment requires three basic tasks:
 
-1. Override the `toVector()` operation inherited from `ArrayBag`
-2. Extend the `ArrayBag` by adding a new operation that removes a random entry in the bag
+1. Provide a different implementation of the `toVector()` operation inherited from `BagInterface`
+2. Update the `BagInterface` by adding a new operation that removes a random entry in the bag
 3. Overload the `ArrayBag` constructor by providing a new constructor that takes an array of items that is used to create a new `ArrayBag`
 
 Before you begin, be sure you have thoroughly read through the aforementioned [Background Reading](#background-reading).
@@ -133,7 +107,7 @@ Additional preliminary steps you may want to take:
 2. Study the [CMakeLists.txt](CMakeLists.txt) file. What do you suppose is the purpose of this file? _Don't worry too much if you don't understand this file; we will discuss it and how its used by a program named `cmake`.
 3. Jot down anything that you don't understand.
 
-### Part 1: Overriding an existing operation
+### Part 1: Modifying an existing operation
 
 In Part 1 of this assignment you will provide a _different implementation_ of the `toVector` operation. Your new implementation will use recursion to create a vector of the items contained in the bag. Recall, recursive functions require some parameter that will help drive repeated execution towards reaching the base case. Thus, the existing `toVector()` operation inherited from the `BagInterface` cannot serve as a recursive function (it doesn't have any parameters, so there's no way to drive you towards a base case case).
 
