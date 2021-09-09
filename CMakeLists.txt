@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(hw02)
+project(hw03)
 
 set(CMAKE_CXX_STANDARD 14)
 
@@ -8,6 +8,8 @@ set(SRC_MAIN_FILES
 set(SRC_DEMO_FILES
         src/demo.cpp)
 set(SRC_TEST_FILES
+        include/BagInterface.h
+        include/ArrayBag.h
         test/test.cpp)
 
 # FetchContent ...
@@ -21,27 +23,27 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(Catch2)
 
-add_executable(hw02 ${SRC_MAIN_FILES})
-add_executable(hw02-demo ${SRC_DEMO_FILES})
-add_executable(hw02-tests ${SRC_TEST_FILES})
+add_executable(hw03 ${SRC_MAIN_FILES})
+add_executable(hw03-demo ${SRC_DEMO_FILES})
+add_executable(hw03-tests ${SRC_TEST_FILES})
 
-target_link_libraries(hw02-tests PRIVATE Catch2::Catch2)
+target_link_libraries(hw03-tests PRIVATE Catch2::Catch2)
 
-target_include_directories(hw02 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/src)
-target_include_directories(hw02-demo PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/src)
-target_include_directories(hw02-tests PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_include_directories(hw03 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_include_directories(hw03-demo PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_include_directories(hw03-tests PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # Setup automatic test registration
 list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/contrib)
 
 include(CTest)
 include(Catch)
-catch_discover_tests(hw02-tests)
+catch_discover_tests(hw03-tests)
 
 # add custom commands that copy data input files to target working directories
-add_custom_command(TARGET hw02 PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/resource/mainData.txt ${CMAKE_CURRENT_BINARY_DIR})
-add_custom_command(TARGET hw02-demo PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/resource/demoData.txt ${CMAKE_CURRENT_BINARY_DIR})
-add_custom_command(TARGET hw02-tests PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/resource/testData.txt ${CMAKE_CURRENT_BINARY_DIR})
+add_custom_command(TARGET hw03 PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/resource/mainData.txt ${CMAKE_CURRENT_BINARY_DIR})
+add_custom_command(TARGET hw03-demo PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/resource/demoData.txt ${CMAKE_CURRENT_BINARY_DIR})
+add_custom_command(TARGET hw03-tests PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/resource/testData.txt ${CMAKE_CURRENT_BINARY_DIR})
 
 # first we can indicate the documentation build as an option and set it to OFF by default
 option(BUILD_DOC "Build documentation" OFF)
