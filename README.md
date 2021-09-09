@@ -1,4 +1,4 @@
-# HW02 - Slay the Lernaean Hydra
+# HW03 - Capture the Ceryneian Hind
 
 Driven mad by CSC131, the Student smashed their laptop.
 
@@ -12,42 +12,30 @@ Jim set two more tasks (fetching the [Golden Apples of Hesperides](https://en.wi
 
 Having slain the Nemean Lion and the Lernaean Hydra, the Student is now prepared to [Capture the Ceryneian Hind](https://en.wikipedia.org/wiki/Labours_of_Hercules#Third:_Ceryneian_Hind), a creature so fast it could outrun an arrow...
 
-<p><a href="https://commons.wikimedia.org/wiki/File:Gustave_Moreau_003.jpg#/media/File:Gustave_Moreau_003.jpg"><img src="https://upload.wikimedia.org/wikipedia/commons/6/61/Gustave_Moreau_003.jpg" alt="Gustave Moreau 003.jpg" height="480" width="410"></a></p>
-
 <p><a href="https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Lucas_Cranach_d.%C3%84._-_Herkules_und_die_Hirschkuh_der_Diana_%28Herzog_Anton_Ulrich-Museum%29.jpg/800px-Lucas_Cranach_d.%C3%84._-_Herkules_und_die_Hirschkuh_der_Diana_%28Herzog_Anton_Ulrich-Museum%29.jpg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Lucas_Cranach_d.%C3%84._-_Herkules_und_die_Hirschkuh_der_Diana_%28Herzog_Anton_Ulrich-Museum%29.jpg/800px-Lucas_Cranach_d.%C3%84._-_Herkules_und_die_Hirschkuh_der_Diana_%28Herzog_Anton_Ulrich-Museum%29.jpg" height="480" width="430"></a></p>
 
-## Recursion: Ackermann's Function
+## ADTs: Extending the ArrayBag
 
-_Note: This assignment is related to the Exercise 26 of Chapter 2 found in **Data Abstraction and Problem-Solving with C++**, seventh edition, by Carrano & Henry. See [our disclaimer below](#disclaimer--fair-use-statement)._
+_Note: This assignment is related to the Exercises 6, 8 and 9 of Chapter 3 found in **Data Abstraction and Problem-Solving with C++**, seventh edition, by Carrano & Henry. See [our disclaimer below](#disclaimer--fair-use-statement)._
 
-This assignment is primarily meant to give the student experience in writing a recursive function. This effort, of course, entails a thorough examination of the four fundamentals questions for constructing recursive solutions:
-
-1. How can you define the problem in terms of a smaller problem of the same type?
-2. How does each recursive call diminish the size of the problem?
-3. What instance of the problem can serve as the base case?
-4. As the problem size diminishes, will you reach this base case?
+This assignment is primarily meant to give the student experience in extending an existing class, i.e., with more experience with the concept of inheritance. Along the way, the student also gains more experience with recursion.
 
 ## Objectives
 
 In this assignment you
 
-* implement a solution to Ackermann's Function
-* modify an existing file under revision control
-* continue to learn basic git commands for staging changes, committing changes and pushing them to GitHub
-* continue to learn how to assemble a pull request for review by your instructor and graduate assistants
+* override an existing method of the `ArrayBag`
+* extend the `ArrayBag` by
+  * adding a new method that removes a random entry in the bag
+  * adding a new constructor
 
-Upon successful completion of this assignment, the student will implement the following problem:
+Upon successful completion of this assignment, the student will implement the following exercises:
 
-> Consider the following recursive definition:
-```
-              { n + 1, if m = 0
-Acker(m, n) = { Acker(m - 1, 1) if n = 0
-              { Acker(m - 1, Acker(m, n - 1)) otherwise
-```
+* **Exercise 6**: Write a recursive array-based implementation of the method `toVector`
+* **Exercise 8**: Specify and define a method for `ArrayBag` that removes a random entry from the bag
+* **Exercise 9**: Add a constructor to the class `ArrayBag` that creates a bag from a given array of entries
 
-This function, called _Ackermann's function_, is of interest because it grows rapidly with respect to the sizes of _m_ and _n_. To get a sense of how this function operates, try computing the following by hand first: `Acker(1, 2)`.
-
-Caution: Even for modest values of _m_ and _n_, Ackermann's function requires _many_ recursive calls.
+These three exercises will be tackled by extending the `ArrayBag` into a new class named `ExtendedArrayBag`.
 
 ## Background Reading
 
@@ -55,23 +43,54 @@ Before you tackle this assignment, it is advised that you read and understand th
 
 * **Appendix A** Review of C++ Fundamentals
 * **Appendix B** Important Themes in Programming
+* **Chapter 1** Data Abstraction: The Walls
+* **C++ Interlude 1** C++ Classes (in particular, C1.4 - Inheritance)
 * **Chapter 2** Recursion: The Mirrors
+* **Chapter 3** Array-based Implementations
 
 If you have not read these chapters, do it now!
 
 ## C++ Concepts Overview
 
-This assignment simply covers the concept of a recursive function. As mentioned above in the introduction of this assignment, a well designed recursive function is constructed by determing the answers to four basic questions. Before you code your solution, take the time to answer these questions.
+As we have seen, inheritance is a form of code reuse. Here, we will reuse much of the code already written in the `ArrayBag`. We will _extend_ this class by overriding one of its inherited methods, writing a new method that isn't a part of the `BagInterface`, and _overloading_ the class constructor.
 
-### Namespaces
+Consider the class hierarchy we have already, and the modification we'll make to it:
 
-The Ackermann function is to be implemented as part of the `csc232` namespace. Making a function definition a part of a namespace is as simple as implementing said function _within_ the given namespace. You'll find a `TODO` statement in [include/csc232.h](include/csc232.h) that explicitly has you writing your function definition within the proper namespace. **It is imperative that your function is defined within this namespace! The Catch2 unit tests rely on this organization**.
+```c++
+template <typename ItemType>
+class ArrayBag : public BagInterface<ItemType> 
+{
+private:
+   // details omitted for brevity
+public:
+   ArrayBag( ItemType items[] ); // an overloaded constructor
+   // remaining details omitted for brevity
+};
+```
+
+Next, we'll _extend_ this `ArrayBag` into a new class named `ExtendedArrayBag`:
+
+```c++
+template <typename ItemType>
+class ExtendedArrayBag : public ArrayBag<ItemType>
+{
+public:
+   bool RemoveRandomEntry( ); // a new extension of the ArrayBag
+   std::vector<ItemType> toVector() const override; // an overridden operation
+};
+```
+
+This small and simple exercise actually entails three important concepts:
+
+1. **Inheritance** - reusing existing code and _adding_ to that code base
+2. **Overloading** operations - providing another operation with the same name but a different signature
+3. **Overriding** operations - providing a new implementation of an _existing_ operation
 
 ## Getting Started
 
-After accepting this assignment with the provided [GitHub Classroom Assignment link](https://classroom.github.com/a/3IULbojN), clone this repository. Once cloned, create a new branch named `develop` within which to do your work. Ultimately, you will create a pull request that seeks to merge your `develop` branch into your `trunk` branch.
+After accepting this assignment with the provided [GitHub Classroom Assignment link](https://classroom.github.com/a/czFGVsNb), clone this repository. Once cloned, create a new branch named `develop` within which to do your work. Ultimately, you will create a pull request that seeks to merge your `develop` branch into your `trunk` branch.
 
-To create your new branch and push it to GitHub, issue the following `git` commands:
+To create your new branch and push it to GitHub, issue the following `git` commands (in either a GitBash window, Ubuntu terminal or via your IDE that supports git operations):
 
 ```bash
 git checkout -b develop
@@ -100,11 +119,11 @@ Don't forget the trailing period `.` for it specifies to code that you want to o
 
 This assignment requires three basic tasks:
 
-1. Modify `csc232.h` so that it implements the `acker()` function. See the `TODO` statement indicating _where_ within this file your function definition should be written.
-2. Document the `acker()` function accordingly
-3. Delete the line containing the `TODO` statement.
+1. Override the `toVector()` operation inherited from `ArrayBag`
+2. Extend the `ArrayBag` by adding a new operation that removes a random entry in the bag
+3. Overload the `ArrayBag` constructor by providing a new constructor that takes an array of items that is used to create a new `ArrayBag`
 
-Before you begin, be sure you have thoroughly read through, and understand Chapter 2 and the concept of recursion.
+Before you begin, be sure you have thoroughly read through the aforementioned [Background Reading](#background-reading).
 
 Additional preliminary steps you may want to take:
 
@@ -114,26 +133,13 @@ Additional preliminary steps you may want to take:
 2. Study the [CMakeLists.txt](CMakeLists.txt) file. What do you suppose is the purpose of this file? _Don't worry too much if you don't understand this file; we will discuss it and how its used by a program named `cmake`.
 3. Jot down anything that you don't understand.
 
-### Part 1: Implement the Ackermann Function
+### Part 1: Overriding an existing operation
 
-In Part 1 of this assignment you will implement the `Acker` function.
+In Part 1 of this assignment you will override the `toVector` operation inherited from the `ArrayBag` class.
 
-1. In the [include](include) folder, modify the file named `csc232.h`.
-2. When implementing your function, make sure of the following:
-   1. You are writing your code within the indicated `csc232` namespace
-   2. You name the function `acker` (note that each letter in the name is lowercase)
-   3. The parameter list contains exactly two parameters of type `int`
-   4. The return value of the `acker` function is of type `int`
-3. When documenting your function, be sure it includes the following tags (with appropriate values):
-   1. `@brief`
-   2. `@param`
-   3. `@pre`
-   4. `@post`
-   5. `@return`
+#### Implementation Notes: A new implementation of an existing function
 
-#### Implementation Notes
-
-Be sure to thoroughly comment your code. Use the `javadoc`-style Doxygen comments to provide a brief description of the function, its parameters, return values and pre and post conditions.
+<!-- Be sure to thoroughly comment your code. Use the `javadoc`-style Doxygen comments to provide a brief description of the function, its parameters, return values and pre and post conditions.
 
 After you have modoified this file, add it to revision control, commit your changes and push the commit to GitHub using the following `git` commands (the output, where it occurred, has been ommitted for clarity).
 
@@ -143,17 +149,33 @@ git commit -m"HW02 - Initial import of Ackermann function."
 git push
 ```
 
-As a final step, log onto GitHub and make sure that your pull request has all your commits. If it doesn't, make a final commit and/or push your last commit to GitHub. Also, make sure that `professordaehn`, `lakshmidivyavaddineni` and `SunandaGuha` are listed as a Reviewers on your pull request. (It may be that only `professordaehn` is listed; if that is the case, manually add the GA usernames too. While you're at it, assign the pull request to yourself.)
+As a final step, log onto GitHub and make sure that your pull request has all your commits. If it doesn't, make a final commit and/or push your last commit to GitHub. Also, make sure that `professordaehn`, `lakshmidivyavaddineni` and `SunandaGuha` are listed as a Reviewers on your pull request. (It may be that only `professordaehn` is listed; if that is the case, manually add the GA usernames too. While you're at it, assign the pull request to yourself.) -->
+
+### Part 2: Extending a class
+
+In Part 2 of this assignment you will _extend_ the `ArrayBag` class by adding a new operation that removes a random entry from the bag.
+
+#### Implementation Notes: Random number generators
+
+TO DO: Discuss generating random numbers in some range (to select a random index in the array for item removal).
+
+### Part 3: Overloading class constructor
+
+In Part 3 of this assignment you will _overload_ the constructor of an existing class (`ArrayBag`).
+
+#### Implementation Notes: Initializing constructors
+
+TO DO: Discuss how to copy the contents of array into newly constructed object.
 
 ## Submission Details
 
-As usual, prior to submitting your assignment to Blackboard, be sure that you have committed and pushed your final changes to GitHub. If you have not done so already, create a **pull request** that seeks to merge your `develop` branch into your `trunk` branch.  Submit the URL of your assignment _repository_ (i.e., _not_ the URL of the pull request) as a Text Submission in Blackboard. Please note: the timestamp of the submission on Blackboard is used to assess any late penalties if and when warranted.
+As usual, prior to submitting your assignment to Blackboard, be sure that you have committed and pushed your final changes to GitHub. If you have not done so already, create a **pull request** that seeks to merge your `develop` branch into your `trunk` branch.  Submit the URL of your assignment _repository_ (i.e., _not_ the URL of the pull request) as a **Text Submission** (and _not_ as a comment) in Blackboard. **Please note**: the timestamp of the submission on Blackboard is used to assess any late penalties if and when warranted.
 
 Finally, be sure that you **do not merge your pull request until it has been approved by one of the assigned reviewers**.
 
 ### Due Date
 
-Your Blackboard submission is due by 23:59 Saturday, 04 September 2021.
+Your Blackboard submission is due by 23:59 Wednesday, 15 September 2021.
 
 ### Grading Rubric
 
