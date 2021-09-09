@@ -10,9 +10,11 @@ Jim originally ordered the Student to perform ten labors. The Student accomplish
 
 Jim set two more tasks (fetching the [Golden Apples of Hesperides](https://en.wikipedia.org/wiki/Labours_of_Hercules#Eleventh:_Golden_Apples_of_the_Hesperides) and capturing [Cerberus](https://en.wikipedia.org/wiki/Labours_of_Hercules#Twelfth:_Cerberus)), which the Student also performed, bringing the total number of tasks to twelve.
 
-Having slain the Nemean Lion, the Student is now prepared to [Slay the Lernaean Hydra](https://en.wikipedia.org/wiki/Labours_of_Hercules#Second:_Lernaean_Hydra)...
+Having slain the Nemean Lion and the Lernaean Hydra, the Student is now prepared to [Capture the Ceryneian Hind](https://en.wikipedia.org/wiki/Labours_of_Hercules#Third:_Ceryneian_Hind), a creature so fast it could outrun an arrow...
 
 <p><a href="https://commons.wikimedia.org/wiki/File:Gustave_Moreau_003.jpg#/media/File:Gustave_Moreau_003.jpg"><img src="https://upload.wikimedia.org/wikipedia/commons/6/61/Gustave_Moreau_003.jpg" alt="Gustave Moreau 003.jpg" height="480" width="410"></a></p>
+
+<p><a href="https://commons.wikimedia.org/wiki/File:Lucas_Cranach_d.%C3%84._-_Herkules_und_die_Hirschkuh_der_Diana_(Herzog_Anton_Ulrich-Museum).jpg#/media/File:Lucas_Cranach_d.Ä._-_Herkules_und_die_Hirschkuh_der_Diana_(Herzog_Anton_Ulrich-Museum).jpg"><img src="https://upload.wikimedia.org/wikipedia/commons/4/42/Lucas_Cranach_d.%C3%84._-_Herkules_und_die_Hirschkuh_der_Diana_%28Herzog_Anton_Ulrich-Museum%29.jpg" alt="Lucas Cranach d.Ä. - Herkules und die Hirschkuh der Diana (Herzog Anton Ulrich-Museum).jpg" height="480" width="430"></a><br>By Workshop of &lt;a href="https://en.wikipedia.org/wiki/en:Lucas_Cranach_the_Elder" class="extiw" title="w:en:Lucas Cranach the Elder"&gt;&lt;span title="German Renaissance painter and printmaker in woodcut and engraving (1472-1553)"&gt;Lucas Cranach the Elder&lt;/span&gt;&lt;/a&gt; - Unknown source, Public Domain, <a href="https://commons.wikimedia.org/w/index.php?curid=25633075">Link</a></p>
 
 ## Recursion: Ackermann's Function
 
