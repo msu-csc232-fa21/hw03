@@ -8,6 +8,8 @@ set(SRC_MAIN_FILES
 set(SRC_DEMO_FILES
         src/demo.cpp)
 set(SRC_TEST_FILES
+        include/BagInterface.h
+        include/ArrayBag.h
         test/test.cpp)
 
 # FetchContent ...
